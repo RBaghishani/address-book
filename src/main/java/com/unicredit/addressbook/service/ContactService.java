@@ -4,6 +4,7 @@ import com.unicredit.addressbook.entity.Contact;
 import com.unicredit.addressbook.dto.ContactDTO;
 import com.unicredit.addressbook.exception.ContactNotFoundException;
 import com.unicredit.addressbook.repository.ContactRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ public class ContactService {
 
     @Autowired
     private ContactRepository contactRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public List<ContactDTO> getAllContacts(String surname) {
         List<Contact> contacts;
@@ -55,10 +59,10 @@ public class ContactService {
     }
 
     private ContactDTO convertToDTO(Contact contact) {
-        return new ContactDTO(contact.getId(), contact.getName(), contact.getSurname(), contact.getPhoneNumber());
+        return modelMapper.map(contact, ContactDTO.class);
     }
 
     private Contact convertToEntity(ContactDTO contactDTO) {
-        return new Contact(null, contactDTO.getName(), contactDTO.getSurname(), contactDTO.getPhoneNumber());
+        return modelMapper.map(contactDTO, Contact.class);
     }
 }
