@@ -7,6 +7,8 @@ import com.unicredit.addressbook.exception.ContactNotFoundException;
 import com.unicredit.addressbook.repository.ContactRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ public class ContactService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Cacheable("contacts")
     public Page<ContactDTO> getAllContacts(String surname, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Contact> contacts;
@@ -41,6 +44,7 @@ public class ContactService {
         return convertToDTO(contact);
     }
 
+    @CacheEvict(value = "contacts", allEntries = true)
     public ContactDTO createContact(ContactDTO contactDTO) {
         String name = contactDTO.getName();
         String surname = contactDTO.getSurname();
@@ -53,6 +57,7 @@ public class ContactService {
         return convertToDTO(savedContact);
     }
 
+    @CacheEvict(value = "contacts", allEntries = true)
     public ContactDTO updateContact(Long id, ContactDTO contactDTO) {
         Contact contact = contactRepository.findById(id)
                 .orElseThrow(() -> new ContactNotFoundException(id));
@@ -63,6 +68,7 @@ public class ContactService {
         return convertToDTO(updatedContact);
     }
 
+    @CacheEvict(value = "contacts", allEntries = true)
     public void deleteContact(Long id) {
         Contact contact = contactRepository.findById(id)
                 .orElseThrow(() -> new ContactNotFoundException(id));
