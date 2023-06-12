@@ -4,6 +4,7 @@ import com.unicredit.addressbook.exception.ContactAlreadyExistsException;
 import com.unicredit.addressbook.exception.ContactNotFoundException;
 import com.unicredit.addressbook.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +25,11 @@ public class ContactController {
         return ResponseEntity.created(URI.create("/contacts/" + createdContact.getId())).body(createdContact);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ContactDTO>> getAllContacts(@RequestParam(required = false) String surname) {
-        List<ContactDTO> contacts = contactService.getAllContacts(surname);
-        return ResponseEntity.ok(contacts);
+    @GetMapping()
+    public Page<ContactDTO> getAllContacts(@RequestParam(required = false) String surname,
+                                           @RequestParam(defaultValue = "0") int pageNumber,
+                                           @RequestParam(defaultValue = "10") int pageSize) {
+        return contactService.getAllContacts(surname, pageNumber, pageSize);
     }
 
     @GetMapping("/{id}")
