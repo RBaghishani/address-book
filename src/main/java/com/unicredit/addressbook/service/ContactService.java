@@ -2,6 +2,7 @@ package com.unicredit.addressbook.service;
 
 import com.unicredit.addressbook.entity.Contact;
 import com.unicredit.addressbook.dto.ContactDTO;
+import com.unicredit.addressbook.exception.ContactAlreadyExistsException;
 import com.unicredit.addressbook.exception.ContactNotFoundException;
 import com.unicredit.addressbook.repository.ContactRepository;
 import org.modelmapper.ModelMapper;
@@ -39,6 +40,12 @@ public class ContactService {
     }
 
     public ContactDTO createContact(ContactDTO contactDTO) {
+        String name = contactDTO.getName();
+        String surname = contactDTO.getSurname();
+        List<Contact> existingContacts = contactRepository.findByNameAndSurname(name, surname);
+        if (!existingContacts.isEmpty()) {
+            throw new ContactAlreadyExistsException(name, surname);
+        }
         Contact contact = convertToEntity(contactDTO);
         Contact savedContact = contactRepository.save(contact);
         return convertToDTO(savedContact);

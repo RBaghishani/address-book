@@ -1,5 +1,6 @@
 package com.unicredit.addressbook.controller;
 import com.unicredit.addressbook.dto.ContactDTO;
+import com.unicredit.addressbook.exception.ContactAlreadyExistsException;
 import com.unicredit.addressbook.exception.ContactNotFoundException;
 import com.unicredit.addressbook.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,11 @@ public class ContactController {
     @ExceptionHandler(ContactNotFoundException.class)
     public ResponseEntity<String> handleContactNotFoundException(ContactNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ContactNotFoundException.class)
+    public ResponseEntity<String> handleContactAlreadyExistsException(ContactAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
