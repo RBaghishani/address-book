@@ -62,6 +62,8 @@ public class ContactService {
     }
 
     public void deleteContact(Long id) {
+        Contact contact = contactRepository.findById(id)
+                .orElseThrow(() -> new ContactNotFoundException(id));
         contactRepository.deleteById(id);
     }
 
