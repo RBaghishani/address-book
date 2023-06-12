@@ -7,6 +7,9 @@ import com.unicredit.addressbook.exception.ContactNotFoundException;
 import com.unicredit.addressbook.repository.ContactRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,16 +24,15 @@ public class ContactService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<ContactDTO> getAllContacts(String surname) {
-        List<Contact> contacts;
+    public Page<ContactDTO> getAllContacts(String surname, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Contact> contacts;
         if (surname != null) {
-            contacts = contactRepository.findBySurname(surname);
+            contacts = contactRepository.findBySurname(surname, pageable);
         } else {
-            contacts = contactRepository.findAll();
+            contacts = contactRepository.findAll(pageable);
         }
-        return contacts.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return contacts.map(this::convertToDTO);
     }
 
     public ContactDTO getContactById(Long id) {
