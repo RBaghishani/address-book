@@ -47,19 +47,4 @@ public class ContactController {
         contactService.deleteContact(id);
         return ResponseEntity.noContent().build();
     }
-
-    @ExceptionHandler(ContactNotFoundException.class)
-    public ResponseEntity<String> handleContactNotFoundException(ContactNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(ContactNotFoundException.class)
-    public ResponseEntity<String> handleContactAlreadyExistsException(ContactAlreadyExistsException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-    }
 }
