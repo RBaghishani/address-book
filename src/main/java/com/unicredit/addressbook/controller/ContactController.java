@@ -1,4 +1,5 @@
 package com.unicredit.addressbook.controller;
+
 import com.unicredit.addressbook.dto.ContactDTO;
 import com.unicredit.addressbook.service.ContactService;
 import jakarta.validation.Valid;
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/contacts")
@@ -37,7 +37,7 @@ public class ContactController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ContactDTO> updateContact(@PathVariable Long id,@Valid @RequestBody ContactDTO contactDTO) {
+    public ResponseEntity<ContactDTO> updateContact(@PathVariable Long id, @Valid @RequestBody ContactDTO contactDTO) {
         ContactDTO updatedContact = contactService.updateContact(id, contactDTO);
         return ResponseEntity.ok(updatedContact);
     }

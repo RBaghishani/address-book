@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 public class ContactDTO {
 
     private Long id;
-    @Size(min=2, max=30)
+    @Size(min = 2, max = 30)
     private String name;
-    @Size(min=2, max=30)
+    @Size(min = 2, max = 30)
     private String surname;
     @Pattern(regexp = "^(\\+\\d{1,2}\\s?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")
     private String phoneNumber;
