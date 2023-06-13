@@ -1,11 +1,9 @@
 package com.unicredit.addressbook.controller;
 import com.unicredit.addressbook.dto.ContactDTO;
-import com.unicredit.addressbook.exception.ContactAlreadyExistsException;
-import com.unicredit.addressbook.exception.ContactNotFoundException;
 import com.unicredit.addressbook.service.ContactService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +18,7 @@ public class ContactController {
     private ContactService contactService;
 
     @PostMapping
-    public ResponseEntity<ContactDTO> createContact(@RequestBody ContactDTO contactDTO) {
+    public ResponseEntity<ContactDTO> createContact(@Valid @RequestBody ContactDTO contactDTO) {
         ContactDTO createdContact = contactService.createContact(contactDTO);
         return ResponseEntity.created(URI.create("/contacts/" + createdContact.getId())).body(createdContact);
     }
@@ -39,7 +37,7 @@ public class ContactController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ContactDTO> updateContact(@PathVariable Long id, @RequestBody ContactDTO contactDTO) {
+    public ResponseEntity<ContactDTO> updateContact(@PathVariable Long id,@Valid @RequestBody ContactDTO contactDTO) {
         ContactDTO updatedContact = contactService.updateContact(id, contactDTO);
         return ResponseEntity.ok(updatedContact);
     }
